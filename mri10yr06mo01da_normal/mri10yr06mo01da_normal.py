@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #                                                            _
 # mri10yr06mo01da_normal fs app
 #
@@ -8,7 +9,93 @@
 #                        dev@babyMRI.org
 #
 
-import os
+import  os
+from    os          import listdir, sep
+from    os.path     import abspath, basename, isdir
+import  shutil
+import  pudb
+import  sys
+import  time
+import  glob
+
+Gstr_title = """
+     
+___  _________ _____      __  _____  _____  ____  _____  __  
+|  \/  || ___ \_   _|    /  ||  _  ||  _  |/ ___||  _  |/  | 
+| .  . || |_/ / | |______`| || |/' || |/' / /___ | |/' |`| | 
+| |\/| ||    /  | |______|| ||  /| ||  /| | ___ \|  /| | | | 
+| |  | || |\ \ _| |_     _| |\ |_/ /\ |_/ / \_/ |\ |_/ /_| |_
+\_|  |_/\_| \_|\___/     \___/\___(_)\___/\_____(_)___/ \___/
+                                                                                          
+"""
+
+Gstr_synopsis = """
+
+    NAME
+
+        mri10yr06mo01da_normal.py
+
+    SYNOPSIS
+
+        python mri10yr06mo01da_normal.py                                \\
+            [-v <level>] [--verbosity <level>]                          \\
+            [--version]                                                 \\
+            [--man]                                                     \\
+            [--meta]                                                    \\
+            [--dir <dir>]                                               \\
+            <outputDir> 
+
+    BRIEF EXAMPLE
+
+        * Copy the (container) internal data to the output directory:
+
+            mkdir out && chmod 777 out
+            python mri10yr06mo01da_normal.py out
+
+    DESCRIPTION
+
+        `mri10yr06mo01da_normal.py` simply copies internal MRI data to the
+        <outputDir>. If an optional [--dir <dir>] is passed, then contents
+        of <dir> are copied instead.
+        
+    ARGS
+
+        [-v <level>] [--verbosity <level>]
+        Verbosity level for app. Not used currently.
+
+        [--version]
+        If specified, print version number. 
+        
+        [--man]
+        If specified, print (this) man page.
+
+        [--meta]
+        If specified, print plugin meta data.
+
+        [--dir <dir>]
+        An optional override directory to copy to the <outputDir>.
+        Note, if run from a containerized version, this will copy 
+        a directory from the *container* file system.
+
+    EXAMPLES
+
+    Copy the embedded MRI data to the ``out`` directory
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Note: this command assumes that a directory called ``../data`` exists
+    relative to the current directory (as is the case in containerized
+    versions of this app).
+
+        mkdir out && chmod 777 out
+        mri10yr06mo01da_normal.py out
+
+    Copy a user specified directory to the ``out`` directory
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        mkdir out && chmod 777 out
+        mri10yr06mo01da_normal.py --dir /usr/src out
+
+"""
 
 # import the Chris app superclass
 from chrisapp.base import ChrisApp
@@ -27,7 +114,7 @@ class MRI10yr06mo01da_normal(ChrisApp):
     TYPE                    = 'fs'
     DESCRIPTION             = 'This application simply copies from embedded data a reference normal anonymized MRI of a subject aged 10 years, 06 months, 01 days.'
     DOCUMENTATION           = 'http://wiki'
-    VERSION                 = '0.1'
+    VERSION                 = '1.0.0'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
@@ -56,11 +143,85 @@ class MRI10yr06mo01da_normal(ChrisApp):
         """
         Define the CLI arguments accepted by this plugin app.
         """
+        self.add_argument("-v", "--verbosity",
+                            help        = "verbosity level for app",
+                            type        = str,
+                            dest        = 'verbosity',
+                            optional    = True,
+                            default     = "0")
+        self.add_argument('--man',
+                            help        = 'if specified, print man page',
+                            type        = bool,
+                            dest        = 'b_man',
+                            action      = 'store_true',
+                            optional    = True,
+                            default     = False)
+        self.add_argument('--meta',
+                            help        = 'if specified, print plugin meta data',
+                            type        = bool,
+                            dest        = 'b_meta',
+                            action      = 'store_true',
+                            optional    = True,
+                            default     = False)
+        self.add_argument('--version',
+                            help        = 'if specified, print version number',
+                            type        = bool,
+                            dest        = 'b_version',
+                            action      = 'store_true',
+                            optional    = True,
+                            default     = False)
+        self.add_argument('--dir', 
+                          dest          ='dir', 
+                          type          = str, 
+                          default       = '', 
+                          optional      = True,
+                          help          = 'directory override')
+
+    def manPage_show(self):
+        """
+        Print some quick help.
+        """
+        print(Gstr_synopsis)
+
+    def metaData_show(self):
+        """
+        Print the plugin meta data
+        """
+        l_metaData  = dir(self)
+        l_classVar  = [x for x in l_metaData if x.isupper() ]
+        for str_var in l_classVar:
+            str_val = getattr(self, str_var)
+            print("%20s: %s" % (str_var, str_val))
 
     def run(self, options):
         """
         Define the code to be run by this plugin app.
         """
+        if options.b_man:
+            self.manPage_show()
+            sys.exit(0)
+
+        if options.b_meta:
+            self.metaData_show()
+            sys.exit(0)
+
+        if options.b_version:
+            print('Plugin Version: %s' % MRI10yr06mo01da_normal.VERSION)
+            sys.exit(0)
+
+        print(Gstr_title)
+        print('Version: %s' % MRI10yr06mo01da_normal.VERSION)
+
+        if len(options.dir):
+            copy_tree(options.dir, options.outputdir)
+        else:
+            str_srcDir  = '../data'
+            l_files = os.listdir(str_srcDir)
+            for str_file in l_files:
+                str_filename = os.path.join(str_srcDir, str_file)
+                if (os.path.isfile(str_filename)):
+                    print('Copying %s...' % str_filename)
+                    shutil.copy(str_filename, options.outputdir)    
 
 # ENTRYPOINT
 if __name__ == "__main__":

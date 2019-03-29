@@ -18,18 +18,17 @@ Abstract
 
 This application simply copies from embedded data a reference normal anonymized MRI of a subject aged 10 years, 06 months, 01 days.
 
-
 Synopsis
 --------
 
 .. code:: bash
 
-    python mri10yr06mo01da_normal.py                                           \
+    mri10yr06mo01da_normal.python                                   \
         [-v <level>] [--verbosity <level>]                          \
         [--version]                                                 \
         [--man]                                                     \
         [--meta]                                                    \
-        <inputDir>
+        [--dir <dir>]                                               \
         <outputDir> 
 
 
@@ -51,14 +50,13 @@ and run with
 
 .. code:: bash
 
-    mri10yr06mo01da_normal.py --man /tmp /tmp
+    mri10yr06mo01da_normal.py --man /tmp
 
-to get inline help. The app should also understand being called with only two positional arguments
+to get inline help. The app should also understand being called with only one positional argument
 
 .. code:: bash
 
-    mri10yr06mo01da_normal.py /some/input/directory /destination/directory
-
+    mri10yr06mo01da_normal.py /destination/directory
 
 Using ``docker run``
 ~~~~~~~~~~~~~~~~~~~~
@@ -78,13 +76,33 @@ Thus, getting inline help is:
 
     mkdir in out && chmod 777 out
     docker run --rm -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing      \
-            fnndsc/pl-mri10yr06mo01da_normal mri10yr06mo01da_normal.py                        \
+            fnndsc/pl-mri10yr06mo01da_normal mri10yr06mo01da_normal.py  \
             --man                                                       \
             /incoming /outgoing
 
 Examples
 --------
 
+Copy the embedded MRI data to the ``out`` directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: bash
+
+    mkdir out && chmod 777 out
+    docker run --rm -v $(pwd)/out:/outgoing                             \
+            fnndsc/pl-mri10yr06mo01da_normal mri10yr06mo01da_normal.py  \
+            /outgoing
+
+Copy a user specified directory to the ``out`` directory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code:: bash
+
+    mkdir out && chmod 777 out
+    docker run --rm -v $(pwd)/out:/outgoing                             \
+            fnndsc/pl-mri10yr06mo01da_normal mri10yr06mo01da_normal.py  \
+            --dir /usr/src
+            /outgoing
 
 
 

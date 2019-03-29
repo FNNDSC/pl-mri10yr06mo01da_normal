@@ -28,11 +28,13 @@ FROM fnndsc/ubuntu-python3:latest
 MAINTAINER fnndsc "dev@babymri.org"
 
 ENV APPROOT="/usr/src/mri10yr06mo01da_normal"  VERSION="0.1"
+COPY ["data", "/usr/src/data"]
 COPY ["mri10yr06mo01da_normal", "${APPROOT}"]
 COPY ["requirements.txt", "${APPROOT}"]
 
 WORKDIR $APPROOT
 
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 CMD ["mri10yr06mo01da_normal.py", "--help"]
