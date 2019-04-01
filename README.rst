@@ -74,11 +74,11 @@ Thus, getting inline help is:
 
 .. code:: bash
 
-    mkdir in out && chmod 777 out
+    mkdir out && chmod 777 out
     docker run --rm -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing      \
             fnndsc/pl-mri10yr06mo01da_normal mri10yr06mo01da_normal.py  \
             --man                                                       \
-            /incoming /outgoing
+            /outgoing
 
 Examples
 --------

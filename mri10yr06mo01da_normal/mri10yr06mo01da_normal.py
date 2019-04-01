@@ -10,8 +10,9 @@
 #
 
 import  os
-from    os          import listdir, sep
-from    os.path     import abspath, basename, isdir
+from    os                      import listdir, sep
+from    os.path                 import abspath, basename, isdir
+from    distutils.dir_util      import copy_tree
 import  shutil
 import  pudb
 import  sys
@@ -114,7 +115,7 @@ class MRI10yr06mo01da_normal(ChrisApp):
     TYPE                    = 'fs'
     DESCRIPTION             = 'This application simply copies from embedded data a reference normal anonymized MRI of a subject aged 10 years, 06 months, 01 days.'
     DOCUMENTATION           = 'http://wiki'
-    VERSION                 = '1.0.1'
+    VERSION                 = '1.0.2'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
