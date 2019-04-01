@@ -29,8 +29,34 @@ Synopsis
         [--man]                                                     \
         [--meta]                                                    \
         [--dir <dir>]                                               \
+        [--splash <splash>]                                         \
         <outputDir> 
 
+
+Arguments
+---------
+
+.. code:: bash
+
+    [-v <level>] [--verbosity <level>]
+    Verbosity level for app. Not used currently.
+
+    [--version]
+    If specified, print version number.
+    
+    [--man]
+    If specified, print (this) man page.
+
+    [--meta]
+    If specified, print plugin meta data.
+
+    [--splash <splash>]
+    An optional splash message to print on startup.
+
+    [--dir <dir>]
+    An optional override directory to copy to the <outputDir>.
+    Note, if run from a containerized version, this will copy 
+    a directory from the *container* file system.
 
 Run
 ----
@@ -94,14 +120,14 @@ Copy the embedded MRI data to the ``out`` directory
             /outgoing
 
 Copy a user specified directory to the ``out`` directory
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: bash
 
     mkdir out && chmod 777 out
     docker run --rm -v $(pwd)/out:/outgoing                             \
             fnndsc/pl-mri10yr06mo01da_normal mri10yr06mo01da_normal.py  \
-            --dir /usr/src
+            --dir /usr/src/data
             /outgoing
 
 

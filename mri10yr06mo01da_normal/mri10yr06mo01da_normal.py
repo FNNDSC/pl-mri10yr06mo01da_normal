@@ -43,6 +43,7 @@ Gstr_synopsis = """
             [--version]                                                 \\
             [--man]                                                     \\
             [--meta]                                                    \\
+            [--splash <splash>]                                         \\
             [--dir <dir>]                                               \\
             <outputDir> 
 
@@ -73,6 +74,9 @@ Gstr_synopsis = """
         [--meta]
         If specified, print plugin meta data.
 
+        [--splash <splash>]
+        An optional splash message to print on startup.
+
         [--dir <dir>]
         An optional override directory to copy to the <outputDir>.
         Note, if run from a containerized version, this will copy 
@@ -91,10 +95,10 @@ Gstr_synopsis = """
         mri10yr06mo01da_normal.py out
 
     Copy a user specified directory to the ``out`` directory
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         mkdir out && chmod 777 out
-        mri10yr06mo01da_normal.py --dir /usr/src out
+        mri10yr06mo01da_normal.py --dir /usr/src/data out
 
 """
 
@@ -115,7 +119,7 @@ class MRI10yr06mo01da_normal(ChrisApp):
     TYPE                    = 'fs'
     DESCRIPTION             = 'This application simply copies from embedded data a reference normal anonymized MRI of a subject aged 10 years, 06 months, 01 days.'
     DOCUMENTATION           = 'http://wiki'
-    VERSION                 = '1.0.2'
+    VERSION                 = '1.1.0'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
@@ -171,6 +175,12 @@ class MRI10yr06mo01da_normal(ChrisApp):
                             action      = 'store_true',
                             optional    = True,
                             default     = False)
+        self.add_argument('--splash',
+                            help        = 'a splash message to print',
+                            type        = str,
+                            dest        = 'splash',
+                            optional    = True,
+                            default     = '')
         self.add_argument('--dir', 
                           dest          ='dir', 
                           type          = str, 
@@ -212,6 +222,9 @@ class MRI10yr06mo01da_normal(ChrisApp):
 
         print(Gstr_title)
         print('Version: %s' % MRI10yr06mo01da_normal.VERSION)
+
+        if len(options.splash):
+            print(options.splash)
 
         if len(options.dir):
             copy_tree(options.dir, options.outputdir)
