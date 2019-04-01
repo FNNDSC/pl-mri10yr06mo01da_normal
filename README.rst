@@ -21,7 +21,7 @@ This application simply copies from embedded data a reference normal anonymized 
 Synopsis
 --------
 
-.. code:: bash
+.. code::
 
     mri10yr06mo01da_normal.python                                   \
         [-v <level>] [--verbosity <level>]                          \
@@ -30,22 +30,21 @@ Synopsis
         [--meta]                                                    \
         [--dir <dir>]                                               \
         [--splash <splash>]                                         \
-        <outputDir> 
-
+        <outputDir>
 
 Arguments
 ---------
 
-.. code:: bash
+.. code::
 
     [-v <level>] [--verbosity <level>]
     Verbosity level for app. Not used currently.
 
     [--version]
     If specified, print version number.
-    
+
     [--man]
-    If specified, print (this) man page.
+    If specified, print this man page.
 
     [--meta]
     If specified, print plugin meta data.
