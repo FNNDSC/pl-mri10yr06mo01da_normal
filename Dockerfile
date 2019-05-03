@@ -27,7 +27,7 @@
 FROM fnndsc/ubuntu-python3:latest
 MAINTAINER fnndsc "dev@babymri.org"
 
-ENV APPROOT="/usr/src/mri10yr06mo01da_normal"  VERSION="0.1"
+ENV APPROOT="/usr/src/mri10yr06mo01da_normal" 
 COPY ["data", "/usr/src/data"]
 COPY ["mri10yr06mo01da_normal", "${APPROOT}"]
 COPY ["requirements.txt", "${APPROOT}"]
