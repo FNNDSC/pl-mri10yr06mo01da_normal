@@ -119,7 +119,7 @@ class MRI10yr06mo01da_normal(ChrisApp):
     TYPE                    = 'fs'
     DESCRIPTION             = 'This application simply copies from embedded data a reference normal anonymized MRI of a subject aged 10 years, 06 months, 01 days.'
     DOCUMENTATION           = 'http://wiki'
-    VERSION                 = '1.1.1'
+    VERSION                 = '1.1.2'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
@@ -148,33 +148,6 @@ class MRI10yr06mo01da_normal(ChrisApp):
         """
         Define the CLI arguments accepted by this plugin app.
         """
-        self.add_argument("-v", "--verbosity",
-                            help        = "verbosity level for app",
-                            type        = str,
-                            dest        = 'verbosity',
-                            optional    = True,
-                            default     = "0")
-        self.add_argument('--man',
-                            help        = 'if specified, print man page',
-                            type        = bool,
-                            dest        = 'b_man',
-                            action      = 'store_true',
-                            optional    = True,
-                            default     = False)
-        self.add_argument('--meta',
-                            help        = 'if specified, print plugin meta data',
-                            type        = bool,
-                            dest        = 'b_meta',
-                            action      = 'store_true',
-                            optional    = True,
-                            default     = False)
-        self.add_argument('--version',
-                            help        = 'if specified, print version number',
-                            type        = bool,
-                            dest        = 'b_version',
-                            action      = 'store_true',
-                            optional    = True,
-                            default     = False)
         self.add_argument('--splash',
                             help        = 'a splash message to print',
                             type        = str,
@@ -208,18 +181,6 @@ class MRI10yr06mo01da_normal(ChrisApp):
         """
         Define the code to be run by this plugin app.
         """
-        if options.b_man:
-            self.manPage_show()
-            sys.exit(0)
-
-        if options.b_meta:
-            self.metaData_show()
-            sys.exit(0)
-
-        if options.b_version:
-            print('Plugin Version: %s' % MRI10yr06mo01da_normal.VERSION)
-            sys.exit(0)
-
         print(Gstr_title)
         print('Version: %s' % MRI10yr06mo01da_normal.VERSION)
 
@@ -236,6 +197,12 @@ class MRI10yr06mo01da_normal(ChrisApp):
                 if (os.path.isfile(str_filename)):
                     print('Copying %s...' % str_filename)
                     shutil.copy(str_filename, options.outputdir)    
+
+    def show_man_page(self):
+        """
+        Print the app's man page.
+        """
+        print(Gstr_synopsis)                    
 
 # ENTRYPOINT
 if __name__ == "__main__":
