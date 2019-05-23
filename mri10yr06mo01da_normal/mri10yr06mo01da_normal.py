@@ -119,7 +119,7 @@ class MRI10yr06mo01da_normal(ChrisApp):
     TYPE                    = 'fs'
     DESCRIPTION             = 'This application simply copies from embedded data a reference normal anonymized MRI of a subject aged 10 years, 06 months, 01 days.'
     DOCUMENTATION           = 'http://wiki'
-    VERSION                 = '1.1.2'
+    VERSION                 = '1.1.4'
     ICON                    = '' # url of an icon image
     LICENSE                 = 'Opensource (MIT)'
     MAX_NUMBER_OF_WORKERS   = 1  # Override with integer value
@@ -160,22 +160,6 @@ class MRI10yr06mo01da_normal(ChrisApp):
                           default       = '', 
                           optional      = True,
                           help          = 'directory override')
-
-    def manPage_show(self):
-        """
-        Print some quick help.
-        """
-        print(Gstr_synopsis)
-
-    def metaData_show(self):
-        """
-        Print the plugin meta data
-        """
-        l_metaData  = dir(self)
-        l_classVar  = [x for x in l_metaData if x.isupper() ]
-        for str_var in l_classVar:
-            str_val = getattr(self, str_var)
-            print("%20s: %s" % (str_var, str_val))
 
     def run(self, options):
         """
