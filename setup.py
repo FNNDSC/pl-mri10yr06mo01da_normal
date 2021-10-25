@@ -15,7 +15,7 @@ def readme():
 
 setup(
       name             =   'mri10yr06mo01da_normal',
-      version          =   '1.1.4',
+      version          =   '1.1.5',
       description      =   'An anonymized MRI exemplar', 
       long_description =   readme(),
       author           =   'Rudolph Pienaar',
